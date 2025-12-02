@@ -1,0 +1,24 @@
+{
+  "name": "filo-app",
+  "version": "1.0.0",
+  "description": "Filo - an AI-powered fitness and nutrition coach that adapts to your training, health data and daily habits.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jaydevnani/filo-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/jaydevnani/filo-app/issues"
+  },
+  "homepage": "https://github.com/jaydevnani/filo-app#readme",
+  "devDependencies": {
+    "turbo": "^2.6.1"
+  }
+}
