@@ -9,6 +9,8 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { DeleteWorkoutButton } from './DeleteWorkoutButton'
+import { EditableSets } from './EditableSets'
+import { AddExercise } from './AddExercise'
 
 type Props = {
   params: Promise<{ id: string }>
@@ -137,56 +139,25 @@ export default async function WorkoutDetailPage({ params }: Props) {
       <div className="space-y-4">
         <h2 className="text-lg font-semibold text-white">Exercises</h2>
         
-        {Object.values(exerciseGroups).map(({ exercise, sets }) => {
-          const exerciseVolume = sets.reduce((sum, set) => sum + (set.reps * (set.weight_kg || 0)), 0)
-          
-          return (
-            <div key={exercise.id} className="rounded-xl bg-slate-900/50 border border-slate-800/50 overflow-hidden">
-              {/* Exercise Header */}
-              <div className="px-4 py-3 bg-slate-800/30 border-b border-slate-800/50">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-medium text-white">{exercise.name}</h3>
-                    <p className="text-xs text-slate-400">
-                      {exercise.muscle_group} {exercise.equipment && `• ${exercise.equipment}`}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm font-medium text-white">{sets.length} sets</p>
-                    <p className="text-xs text-slate-400">{Math.round(exerciseVolume)} kg</p>
-                  </div>
-                </div>
-              </div>
+        {Object.values(exerciseGroups).map(({ exercise, sets }) => (
+          <EditableSets
+            key={exercise.id}
+            sessionId={session.id}
+            exerciseId={exercise.id}
+            exerciseName={exercise.name}
+            muscleGroup={exercise.muscle_group}
+            equipment={exercise.equipment}
+            initialSets={sets.map(s => ({
+              id: s.id,
+              set_number: s.set_number,
+              reps: s.reps,
+              weight_kg: s.weight_kg,
+            }))}
+          />
+        ))}
 
-              {/* Sets Table */}
-              <div className="p-4">
-                <div className="grid grid-cols-3 gap-2 text-xs font-medium text-slate-400 mb-2 px-2">
-                  <div>SET</div>
-                  <div className="text-center">WEIGHT</div>
-                  <div className="text-center">REPS</div>
-                </div>
-                
-                {sets
-                  .sort((a, b) => a.set_number - b.set_number)
-                  .map((set) => (
-                    <div key={set.id} className="grid grid-cols-3 gap-2 py-2 px-2 rounded-lg hover:bg-slate-800/30">
-                      <div className="flex items-center">
-                        <span className="inline-flex items-center justify-center w-7 h-7 rounded-md bg-slate-800 text-slate-300 text-sm">
-                          {set.set_number}
-                        </span>
-                      </div>
-                      <div className="text-center text-white">
-                        {set.weight_kg ? `${set.weight_kg} kg` : '—'}
-                      </div>
-                      <div className="text-center text-white">
-                        {set.reps}
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            </div>
-          )
-        })}
+        {/* Add New Exercise */}
+        <AddExercise sessionId={session.id} />
       </div>
 
       {/* Actions */}

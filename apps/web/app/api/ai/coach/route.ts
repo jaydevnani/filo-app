@@ -166,8 +166,8 @@ ${userContext}
 Create today's personalized plan:`
     }
 
-    // Call Gemini 2.0 Flash (fast and capable)
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
+    // Call Gemini 2.5 Flash (latest stable, high quotas)
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
     
     const result = await model.generateContent(prompt)
     const response = result.response.text()
@@ -186,6 +186,16 @@ Create today's personalized plan:`
 
   } catch (error) {
     console.error('AI Coach error:', error)
+    
+    // Check for rate limit error
+    const errorMessage = error instanceof Error ? error.message : ''
+    if (errorMessage.includes('429') || errorMessage.includes('Too Many Requests')) {
+      return NextResponse.json(
+        { error: 'Rate limit reached. Please wait a minute and try again.' },
+        { status: 429 }
+      )
+    }
+    
     return NextResponse.json(
       { error: 'Failed to generate insight' },
       { status: 500 }

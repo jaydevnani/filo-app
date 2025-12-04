@@ -16,6 +16,7 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { AICoach } from './components/AICoach'
+import { TodaysWorkout } from './components/TodaysWorkout'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -168,6 +169,9 @@ export default async function DashboardPage() {
           </div>
         </Link>
       </div>
+
+      {/* Today's Workout */}
+      <TodaysWorkout />
 
       {/* Quick Actions + Recent Workouts */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">

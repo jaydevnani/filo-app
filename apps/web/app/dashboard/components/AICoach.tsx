@@ -31,11 +31,12 @@ export function AICoach({ userName }: AICoachProps) {
         body: JSON.stringify({ type: 'insight' }),
       })
 
+      const data = await response.json()
+      
       if (!response.ok) {
-        throw new Error('Failed to generate insight')
+        throw new Error(data.error || 'Failed to generate insight')
       }
 
-      const data = await response.json()
       setInsight(data.message)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong')
@@ -55,11 +56,12 @@ export function AICoach({ userName }: AICoachProps) {
         body: JSON.stringify({ type: 'daily_plan' }),
       })
 
+      const data = await response.json()
+      
       if (!response.ok) {
-        throw new Error('Failed to generate plan')
+        throw new Error(data.error || 'Failed to generate plan')
       }
 
-      const data = await response.json()
       setDailyPlan(data.message)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong')
